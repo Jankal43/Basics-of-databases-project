@@ -1,0 +1,197 @@
+<%- include('partials/header.ejs'); -%>
+
+<form class="item" action="/show" method="post">
+  <input type="hidden" name="tableName" value="devices">
+  <button class="Show" type="submit">Show Devices</button>
+</form>
+
+<form class="item" action="/show" method="post">
+  <input type="hidden" name="tableName" value="employees">
+  <button class="Show" type="submit">Show Employees</button>
+</form>
+
+<form class="item" action="/show" method="post">
+  <input type="hidden" name="tableName" value="projects">
+  <button class="Show" type="submit">Show Projects</button>
+</form>
+
+<form class="item" action="/Innerjoin" method="post">
+  <input type="hidden" name="tableName" value="projects">
+  <button class="Show" type="submit">Inner join</button>
+</form>
+
+<form class="item" action="/Leftjoin" method="post">
+  <input type="hidden" name="tableName" value="projects">
+  <button class="Show" type="submit">Left join</button>
+</form>
+
+
+<hr>
+
+<% if(locals.listItems && tableName) { %>
+<% if (tableName === 'devices' || tableName === 'employees' || tableName === 'projects') { %>
+  <h1>Data from <%= tableName %> table</h1>
+  <% if (listItems && listItems.length > 0) { %>
+    <% listItems.forEach(function(item) { %>
+      <div class="item">
+        <% Object.keys(item).forEach(function(property) { %>
+          <%= item[property] %>
+        <% }); %>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>No items found in <%= tableName %> table.</p>
+  <% } %>
+<% } else { %>
+  <p>Invalid table name or no table selected.</p>
+<% } %>
+<% } %>
+
+
+<% if (locals.listItems5 && listItems5.length > 0) { %>
+  <h1>Data from Employees and Projects tables</h1>
+  <div>
+    <% listItems5.forEach(function (row) { %>
+      <div class="item">
+        <%= row.firstname %>
+        <%= row.lastname %>
+        <%= row.projectname !== null ? row.projectname : "null" %>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+
+<hr>
+<h1>Add employee</h1>
+<body>
+  
+  <form action="/new" method="post">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required><br>
+
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required><br>
+
+      <label for="position">Position:</label>
+      <input type="text" id="position" name="position" required><br>
+
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="tel" id="phonenumber" name="phonenumber" pattern="[0-9]{9}" placeholder="Format: 123456789" required><br>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required><br>
+
+      <input type="submit">
+  </form>
+</body>
+
+
+<hr>
+
+
+
+<h3>Select table to delete or update</h3>
+<form action="/select" method="post">
+  <label for="sTable">Choose a Table:</label>
+  <select id="sTable" name="sTable">
+    <option value="devices">Devices</option>
+    <option value="employees">Employees</option>
+    <option value="projects">Projects</option>
+  </select>
+  <input type="submit">
+</form>
+
+
+<% if(locals.listItems2 && tableName2) { %>
+  <% if (tableName2 === 'devices' || tableName2 === 'employees' || tableName2 === 'projects') { %>
+    <h3>DELETE <%= tableName2 %> </h3>
+   
+    <% if (listItems2 && listItems2.length > 0) { %>
+      <form action="/delete2" method="post">
+        <label for="Names">DELETE FROM <%= tableName2 %> WHERE</label>
+        <select id="Names" name="Names">
+          <% listItems2[0] && Object.keys(listItems2[0]).forEach(function(property) { %>
+            <option value="<%= property %>"><%= property %></option>   
+          <% }); %>
+          
+        </select>
+
+
+        <select id="char" name="char">
+          <option value="=">=</option>
+          <option value=">=">>=</option>
+          <option value="<="><=</option>
+          <option value="!=">!=</option>   
+          <option value=">">></option> 
+          <option value="<"><</option> 
+      </select>
+
+        <input type="text" id="toDelete" name="toDelete" required>
+        <input type="hidden" name="tableName2" value="<%= tableName2 %>">   
+        <input type="submit">
+      </form>
+    <% } else { %>
+      <p>No items found in <%= tableName2 %> table.</p>
+    <% } %>
+  <% } else { %>
+    <p>Invalid table name or no table selected.</p>
+  <% } %>
+<% } %>
+
+
+
+
+<% if(locals.listItems2 && tableName2) { %>
+  <% if (tableName2 === 'devices' || tableName2 === 'employees' || tableName2 === 'projects') { %>
+    <h3>UPDATE <%= tableName2 %> </h3>
+    
+    <% if (listItems2 && listItems2.length > 0) { %>
+      <form action="/update" method="post">
+     
+        <label for="Names">Update <%= tableName2 %> SET = </label>
+     
+        <select id="Names1" name="Names1">
+          <% listItems2[0] && Object.keys(listItems2[0]).forEach(function(property) { %>
+            <option value="<%= property %>"><%= property %></option>   
+          <% }); %>
+          
+        </select>
+
+        <label for="condition1">=</label>
+        <input type="text" id="condition1" name="condition1" required>
+        <label for="condition1">WHERE</label>
+
+        <select id="Names2" name="Names2">
+          <% listItems2[0] && Object.keys(listItems2[0]).forEach(function(property) { %>
+            <option value="<%= property %>"><%= property %></option>   
+          <% }); %>
+        </select>
+        
+        <select id="char" name="char">
+          <option value="=">=</option>
+          <option value=">=">>=</option>
+          <option value="<="><=</option>
+          <option value="!=">!=</option>   
+          <option value=">">></option> 
+          <option value="<"><</option> 
+      </select>
+
+        <input type="text" id="condition2" name="condition2" required>
+        <input type="hidden" name="tableName2" value="<%= tableName2 %>">   
+        <input type="submit">
+      </form>
+    
+     
+
+      <% } else { %>
+      <p>No items found in <%= tableName2 %> table.</p>
+    <% } %>
+  <% } else { %>
+    <p>Invalid table name or no table selected.</p>
+  <% } %>
+<% } %>
+
+<hr>
+
+<%- include('partials/footer.ejs'); -%>
